@@ -24,7 +24,6 @@
 export default {
   data () {
     return {
-      debug: '',
       speed: 8,
       pEvents: [],
       backgroundPosition: 0,
@@ -70,10 +69,9 @@ export default {
       this.pEvents = this.pEvents.filter(p => p.pointerId != e.pointerId)
     },
     moveCamera (e) {
-      console.log('moveCamera')
       const prevEvents = [...e.getCoalescedEvents()]
-      const prevX = prevEvents.length > 1 ? prevEvents[prevEvents.length - 2].x : e.x
-      const currX = e.x
+      const prevX = prevEvents.length > 1 ? prevEvents[prevEvents.length - 2].clientX : e.clientX
+      const currX = e.clientX
       const delta = (prevX - currX) * this.speed
 
       this.backgroundPosition = this.backgroundPosition - delta
@@ -89,8 +87,8 @@ export default {
       const [ e1Start, e1End ] = e1.getCoalescedEvents()
       const [ e2Start, e2End ] = e2.getCoalescedEvents()
 
-      const start = Math.atan2((e2Start.y - e1Start.y), (e2Start.x - e1Start.x))
-      const end = Math.atan2((e2End.y - e1End.y), (e2End.x - e1End.x))
+      const start = Math.atan2((e2Start.clientY - e1Start.clientY), (e2Start.clientX - e1Start.clientX))
+      const end = Math.atan2((e2End.clientY - e1End.clientY), (e2End.clientX - e1End.clientX))
       const delta = (end - start) * 50
 
       const nextBrightness = delta + this.brightness
@@ -106,17 +104,14 @@ export default {
       const [ e1Start, e1End ] = e1.getCoalescedEvents()
       const [ e2Start, e2End ] = e2.getCoalescedEvents()
 
-      const start = Math.pow(Math.pow(e2Start.x - e1Start.x, 2) + Math.pow(e2Start.y - e1Start.y, 2), 1 / 2)
-      const end = Math.pow(Math.pow(e2End.x - e1End.x, 2) + Math.pow(e2End.y - e1End.y, 2), 1 / 2)
+      const start = Math.pow(Math.pow(e2Start.clientX - e1Start.clientX, 2) + Math.pow(e2Start.clientY - e1Start.clientY, 2), 1 / 2)
+      const end = Math.pow(Math.pow(e2End.clientX - e1End.clientX, 2) + Math.pow(e2End.clientY - e1End.clientY, 2), 1 / 2)
       const delta = (end - start) / 100
 
       const nextZoom = delta + this.zoom
       if (Math.abs(delta) > deadzone) {
         this.zoom = (nextZoom < 1) ? 1 : ((nextZoom > 5) ? 5 : nextZoom)
       }
-    },
-    explicitZoom (e) {
-      console.log(e)
     }
   }
 }

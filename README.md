@@ -55,7 +55,7 @@ if (Math.abs(delta) > deadzone) {
 
 doZoom определяет новое значение zooma путем нахождения разницы в расстоянии между поинтерами.  
 ```javascript
-const start = Math.pow(Math.pow(e2Start.clientX - e1Start.clientX, 2) + Math.pow(e2Start.clientY - e1Start.y, 2), 1 / 2)
+const start = Math.pow(Math.pow(e2Start.clientX - e1Start.clientX, 2) + Math.pow(e2Start.clientY - e1Start.clientY, 2), 1 / 2)
 const end = Math.pow(Math.pow(e2End.clientX - e1End.clientX, 2) + Math.pow(e2End.clientY - e1End.clientY, 2), 1 / 2)
 const delta = (end - start) / 100
 const nextZoom = delta + this.zoom

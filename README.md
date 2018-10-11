@@ -27,8 +27,8 @@ grid-auto-rows min-content
 ### [Source](https://github.com/NSkye/shri-18-smarthouse-task-1/blob/master/src/components/task-2/SensorInput.vue)
 ### Запуск
 Установка: `npm i`  
-Запуск dev server: `npm start` 
-Роут: /#/task-2
+Запуск dev server: `npm start`  
+Роут: `/#/task-2`
 ### Что есть
 1. Обзор на 360 градусов
 1. Поинтер продолжает отслеживаться и за пределами элемента (и окна браузера тоже)

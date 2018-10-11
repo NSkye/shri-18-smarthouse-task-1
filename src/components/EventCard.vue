@@ -2,14 +2,14 @@
   <div class='event-card' v-bind:class='cardInfo.type'>
     <div role='button' aria-label='close' class="event-card__close" />
     <div role='button' aria-label='next' class="event-card__next" />
-    <div class="event-card__heading">
-      <i class="event-card__icon"><img v-bind:src="icons[cardInfo.icon]" v-bind:alt="cardInfo.icon"></i>
-      <h2 class="event-card__title">{{ cardInfo.title }}</h2>
-      <span class="event-card__source">{{ cardInfo.source }}</span>
-      <span class="event-card__time">{{ cardInfo.time }}</span>
+    <div class='event-card__heading'>
+      <i class='event-card__icon'><img v-bind:src='icons[cardInfo.icon]' v-bind:alt='cardInfo.icon'></i>
+      <h2 class='event-card__title'>{{ cardInfo.title }}</h2>
+      <span class='event-card__source'>{{ cardInfo.source }}</span>
+      <span class='event-card__time'>{{ cardInfo.time }}</span>
     </div>
-    <div class="event-card__data">
-      <span v-if='cardInfo.description' class="event-card__description">{{ cardInfo.description }}</span>
+    <div class='event-card__data'>
+      <span v-if='cardInfo.description' class='event-card__description'>{{ cardInfo.description }}</span>
       <Player v-if='cardInfo.data && cardInfo.data.volume' :data='cardInfo.data'/>
       <div class='climate' v-if='cardInfo.data && cardInfo.data.temperature'>
         <span class='climate__item'>
@@ -21,8 +21,8 @@
       </div>
       <div v-if='cardInfo.data && cardInfo.data.type == "graph"' class='event-card__img-container'><img v-bind:src='graph' class='event-card__img' /></div>
       <div v-if='cardInfo.data && cardInfo.data.image' class='event-card__img-container'><img v-bind:src='robotCleaner' class='event-card__img' /></div>
-      <div v-if='cardInfo.data && cardInfo.data.buttons' class="buttons">
-        <button v-for='(caption, index) in cardInfo.data.buttons' v-bind:key='index' class="buttons__button"><strong>{{ caption }}</strong></button>
+      <div v-if='cardInfo.data && cardInfo.data.buttons' class='buttons'>
+        <button v-for='(caption, index) in cardInfo.data.buttons' v-bind:key='index' class='buttons__button'><strong>{{ caption }}</strong></button>
       </div>
     </div>
   </div>
@@ -54,7 +54,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang='stylus' scoped>
 .event-card
   display grid
   grid-template-columns 100%

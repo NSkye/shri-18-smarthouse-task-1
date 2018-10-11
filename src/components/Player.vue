@@ -1,20 +1,20 @@
 <template>
   <div class='player'>
-    <div class="player__albumcover"><img v-bind:src="data.albumcover" alt=""></div>
-    <div class="player__track">
+    <div class='player__albumcover'><img v-bind:src='data.albumcover' alt=''></div>
+    <div class='player__track'>
       <span>{{ data.artist }}</span> - <span>{{ data.track.name }}</span>
     </div>
-    <div class="dummy"></div>
-    <div class="seekbar">
-      <div class="seekbar__track" />
-      <div class="seekbar__thumb" />
+    <div class='dummy'></div>
+    <div class='seekbar'>
+      <div class='seekbar__track' />
+      <div class='seekbar__thumb' />
     </div>
     <span class='player__time'>{{ data.track.length }}</span>
     <span class='player__seekback'></span>
     <span class='player__seekforward'></span>
     <div class='volumebar'>
-      <div class="volumebar__track" />
-      <div class="volumebar__thumb" />
+      <div class='volumebar__track' />
+      <div class='volumebar__thumb' />
     </div>
     <div class='player__volume'>
       {{ `${data.volume}%` }}
@@ -28,7 +28,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang='stylus' scoped>
 .player
   display grid
   grid-template-columns 52px min-content 1fr 30px

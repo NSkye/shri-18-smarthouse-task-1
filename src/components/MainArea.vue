@@ -1,7 +1,7 @@
 <template>
   <main class='main-area'>
     <h1 class='main-area__heading'>Лента событий</h1>
-    <ul class="events-list">
+    <ul class='events-list'>
       <EventCard
         role='li'
         class='events-list__item'
@@ -32,7 +32,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang='stylus' scoped>
 .main-area
   padding-top 90px
   display grid
@@ -76,13 +76,11 @@ export default {
     min-height 171px
     &.s
       grid-column span 2
-      //min-height 171px
     &.l
       grid-column span 4
       grid-row span 3
     &.m
       grid-column span 3
-      // min-height 327px
   @media (max-width 1000px)
     &__item
       &.s, &.l, &.m

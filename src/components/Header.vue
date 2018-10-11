@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed-pos-wrapper">
+  <div class='fixed-pos-wrapper'>
     <header class='header'>
       <div class='logo'>
         <img class='logo__image' v-bind:src='logo'>
@@ -35,7 +35,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang='stylus' scoped>
 .fixed-pos-wrapper
   width 100%
   height auto

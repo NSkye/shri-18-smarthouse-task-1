@@ -1,10 +1,10 @@
 <template>
-  <div role='button' aria-label='navigation' class="menu-button menu-button--inactive">
-    <div class="menu-button__element" />
+  <div role='button' aria-label='navigation' class='menu-button menu-button--inactive'>
+    <div class='menu-button__element' />
   </div>
 </template>
 
-<style lang="stylus" scoped>
+<style lang='stylus' scoped>
 $time = .2s
 
 d2(a)
@@ -14,7 +14,7 @@ animate-backwards(function, timing)
 animate-forwards(function, timing)
   transition top d2(timing) function, transform d2(timing) function d2(timing)
 deploy-el(m, time)
-  content ""
+  content ''
   position absolute
   height 20%
   width 100%

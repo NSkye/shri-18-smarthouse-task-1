@@ -18,7 +18,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang='stylus' scoped>
 .app
   display grid
   grid-template-columns 100%
@@ -26,7 +26,7 @@ export default {
   min-height 100vh
 </style>
 
-<style lang="stylus">
+<style lang='stylus'>
 html
   font-size 10px
   @media (max-width 800px)

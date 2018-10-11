@@ -1,15 +1,15 @@
 <template>
   <nav class='navigation'>
     <ul class='navigation__list'>
-      <li class="navigation__item"><a class="navigation__link" href="/">События</a></li>
-      <li class="navigation__item"><a class="navigation__link" href="#">Сводка</a></li>
-      <li class="navigation__item"><a class="navigation__link" href="#">Устройства</a></li>
-      <li class="navigation__item"><a class="navigation__link" href="#">Сценарии</a></li>
+      <li class='navigation__item'><a class='navigation__link' href='/'>События</a></li>
+      <li class='navigation__item'><a class='navigation__link' href='#'>Сводка</a></li>
+      <li class='navigation__item'><a class='navigation__link' href='#'>Устройства</a></li>
+      <li class='navigation__item'><a class='navigation__link' href='#'>Сценарии</a></li>
     </ul>
   </nav>
 </template>
 
-<style lang="stylus" scoped>
+<style lang='stylus' scoped>
 .navigation
   width auto
   min-height 100%

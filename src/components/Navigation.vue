@@ -39,6 +39,7 @@
     text-decoration none
     color #8a8a8a
     font-weight bold
+    font-size 16px
   &__link[href='/']
     color #333333
 

@@ -4,7 +4,6 @@
     <div class='player__track'>
       <span>{{ data.artist }}</span> - <span>{{ data.track.name }}</span>
     </div>
-    <div class='dummy'></div>
     <div class='seekbar'>
       <div class='seekbar__track' />
       <div class='seekbar__thumb' />

@@ -1,7 +1,7 @@
 <template>
   <div class='app'>
     <Header />
-    <MainArea />
+    <router-view></router-view>
     <Footer />
   </div>
 </template>
@@ -12,8 +12,15 @@ import Header from '@/components/Header'
 import MainArea from '@/components/MainArea'
 
 export default {
+  computed: {
+    MainContainer () {
+      return this.$route
+    }
+  },
   components: {
-    Footer, Header, MainArea
+    Footer,
+    Header,
+    MainArea
   }
 }
 </script>

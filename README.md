@@ -55,16 +55,16 @@ if (Math.abs(delta) > deadzone) {
 
 doZoom определяет новое значение zooma путем нахождения разницы в расстоянии между поинтерами.  
 ```javascript
-const start = Math.pow(Math.pow(e2Start.x - e1Start.x, 2) + Math.pow(e2Start.y - e1Start.y, 2), 1 / 2)
-const end = Math.pow(Math.pow(e2End.x - e1End.x, 2) + Math.pow(e2End.y - e1End.y, 2), 1 / 2)
+const start = Math.pow(Math.pow(e2Start.clientX - e1Start.clientX, 2) + Math.pow(e2Start.clientY - e1Start.clientY, 2), 1 / 2)
+const end = Math.pow(Math.pow(e2End.clientX - e1End.clientX, 2) + Math.pow(e2End.clientY - e1End.clientY, 2), 1 / 2)
 const delta = (end - start) / 100
 const nextZoom = delta + this.zoom
 ```
 
 doPinch определяет новое значение путем нахождения разницы между арктангенсами угла образованного векторами из поинтеров на плошлом ивенте и на текущем.  
 ```javascript
-const start = Math.atan2((e2Start.y - e1Start.y), (e2Start.x - e1Start.x))
-const end = Math.atan2((e2End.y - e1End.y), (e2End.x - e1End.x))
+const start = Math.atan2((e2Start.clientY - e1Start.clientY), (e2Start.clientX - e1Start.clientX))
+const end = Math.atan2((e2End.clientY - e1End.clientY), (e2End.clientX - e1End.clientX))
 const delta = (end - start) * 50
 const nextBrightness = delta + this.brightness
 ```

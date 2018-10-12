@@ -3,6 +3,7 @@
     <div class='sensor-input'>
       <div class="sensor-input__window-wrapper">
         <div
+          touch-action="none"
           class="sensor-input__window"
           ref='cameraWindow'
           :style='{
@@ -26,6 +27,7 @@ export default {
     return {
       speed: 8,
       pEvents: [],
+      coalescedEvents: [],
       backgroundPosition: 0,
       zoom: 1,
       brightness: 100,
@@ -37,17 +39,22 @@ export default {
     this.camera.addEventListener('touchmove', e => e.preventDefault())
     this.camera.addEventListener('pointerdown', this.registerPointerDown)
     this.camera.addEventListener('pointermove', this.registerPointerMove)
-    this.camera.addEventListener('pointerup', this.registerPointerUp)
-    this.camera.addEventListener('pointercancel', this.registerPointerCancel)
+    this.camera.addEventListener('pointerup', this.registerPointerDeath)
+    this.camera.addEventListener('pointercancel', this.registerPointerDeath)
+    this.camera.addEventListener('pointerleave', this.registerPointerDeath)
   },
   methods: {
     registerPointerDown (e) {
-      e.preventDefault()
       this.camera.setPointerCapture(e.pointerId)
       this.pEvents.push(e)
     },
     registerPointerMove (e) {
       e.preventDefault()
+
+      if (!e.getCoalescedEvents) {
+        this.addCoalescedEvent(e)
+        e.getCoalescedEvents = () => this.getCoalescedEvents(e)
+      }
 
       const prevVer = this.pEvents.find(p => p.pointerId == e.pointerId)
       if (prevVer) {
@@ -60,11 +67,8 @@ export default {
         this.do()
       }
     },
-    registerPointerUp (e) {
-      this.camera.releasePointerCapture(e.pointerId)
-      this.pEvents = this.pEvents.filter(p => p.pointerId != e.pointerId)
-    },
-    registerPointerCancel (e) {
+    registerPointerDeath (e) {
+      this.clearCoalescedEvents(e)
       this.camera.releasePointerCapture(e.pointerId)
       this.pEvents = this.pEvents.filter(p => p.pointerId != e.pointerId)
     },
@@ -112,6 +116,19 @@ export default {
       if (Math.abs(delta) > deadzone) {
         this.zoom = (nextZoom < 1) ? 1 : ((nextZoom > 5) ? 5 : nextZoom)
       }
+    },
+    addCoalescedEvent (e) {
+      if (this.getCoalescedEvents(e).length >= 2) {
+        let removedOne = false
+        this.coalescedEvents = this.coalescedEvents.filter(ce => !(e.pointerId === ce.pointerId && !removedOne && (removedOne = true)))
+      }
+      this.coalescedEvents.push(e)
+    },
+    getCoalescedEvents (e) {
+      return this.coalescedEvents.filter(ce => ce.pointerId === e.pointerId)
+    },
+    clearCoalescedEvents (e) {
+      this.coalescedEvents = this.coalescedEvents.filter(ce => ce.pointerId !== e.pointerId)
     }
   }
 }
@@ -147,5 +164,5 @@ export default {
     height 320px
     background-image url('~@/assets/panorama.jpg')
     background-size auto 320px
-    touch-action manipulation
+    touch-action none
 </style>

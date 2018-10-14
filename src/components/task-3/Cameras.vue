@@ -28,10 +28,16 @@ export default {
 .videos-container
   position relative
   display grid
-  grid-template-columns repeat(2, 480px)
-  grid-template-rows repeat(2, 360px)
+  grid-template-columns repeat(auto-fill, 360px)
+  grid-template-rows repeat(auto-fill, 360px)
+  grid-auto-rows 360px
+  grid-auto-flow row dense
+  max-width 720px
+  height auto
+  width 100%
+  margin 0 auto
+  margin-top 120px
+  margin-bottom 5.2vh
   justify-content center
   align-content center
-  gap 20px
-  margin-top 90px
 </style>

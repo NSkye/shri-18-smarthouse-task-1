@@ -31,6 +31,7 @@ export default {
   display flex
   flex-wrap wrap
   align-content center
+  align-items center
   @media (max-width 640px)
     border-top none
     justify-content center
@@ -38,12 +39,16 @@ export default {
     padding-right 20px
     &:last-child
       padding-right 0
+    @media (max-width 700px)
+      padding-left 20px
+      &:last-child
+        padding-right 20px
   &__link
     text-decoration none
     color inherit
   &__copyright
     text-align right
     margin-left auto
-    @media (max-width 640px)
-      margin-left 0
+    @media (max-width 700px)
+      margin-left inherit
 </style>

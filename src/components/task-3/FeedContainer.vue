@@ -130,8 +130,8 @@ export default {
     },
     processImage () {
       const ctx = this.canvas.getContext('2d')
-      const w = this.videoContainer.videoWidth / 2
-      const h = this.videoContainer.videoHeight / 2
+      const w = this.videoContainer.videoWidth
+      const h = this.videoContainer.videoHeight
 
       this.canvas.width = w
       this.canvas.height = h
@@ -140,7 +140,18 @@ export default {
         ctx.drawImage(this.videoContainer, 0, 0, w, h)
 
         const imgData = ctx.getImageData(0, 0, w, h).data
-        const medianBrightness = (imgData.sort((a, b) => a - b))[Math.floor(imgData.length / 2)]
+
+        // существенно уменьшаем количество обрабатываемых пикселей, будет где-то 63, достаточно, чтоб понять уровень освещенности
+        const step = Math.floor((imgData.length) / 250) * 4
+
+        let avgBrightness = []
+        for (let i = 0; i < imgData.length; i += step) {
+          const r = imgData[i]
+          const g = imgData[i + 1] || 0
+          const b = imgData[i + 2] || 0
+          avgBrightness.push((r + g + b) / 3)
+        }
+        const medianBrightness = (avgBrightness.sort((a, b) => a - b))[Math.floor(avgBrightness.length / 2)]
         const imgBrightnessPercentage = (medianBrightness / 255) * 100
 
         this.brightnessLevel = imgBrightnessPercentage

@@ -32,6 +32,9 @@
 </template>
 
 <script>
+import { animateTransform } from './animations'
+import { processAudio } from './process-audio'
+import { focusOn, focusOff } from './animation-runners'
 const HLS = window.Hls
 
 export default {
@@ -71,61 +74,13 @@ export default {
     source: String
   },
   methods: {
-    focusOn () {
-      if (!this.animationInProgress && !this.focusActive) {
-        this.makeAbsolute()
-        this.style.zIndex = 4
-        this.videoContainer.style.zIndex = -1
-        this.focusActive = true
-        this.animationInProgress = true
-        this.backwardFrames = this.animateTransform(() => {
-          this.animationInProgress = false
-          this.showControls = true
-          this.processAudio()
-        }, 200)
-      }
-    },
-    focusOff () {
-      if (!this.animationInProgress && this.focusActive) {
-        this.animationInProgress = true
-        this.showControls = false
-        this.animateTransform(() => {
-          this.focusActive = false
-          this.style.zIndex = 0
-          this.makeStatic()
-          this.animationInProgress = false
-          this.videoContainer.style.zIndex = 'auto'
-        }, 200, this.backwardFrames)
-      }
-    },
-    animateTransform (cb, time, frames) {
-      const { scale, translate } = this.calculateTransform()
-      frames = frames || [
-        { transform: 'translate(0) scale(1)' },
-        { transform: `${translate} ${scale}` }
-      ]
-      const player = this.$refs.videoDiv.animate(frames, {
-        duration: time,
-        iterations: 1,
-        fill: 'forwards'
-      })
-      setTimeout(cb, time)
-      player.play()
-      return frames.reverse()
-    },
-    calculateTransform () {
-      const wc = window.innerHeight < this.$refs.wrapperDiv.parentElement.scrollHeight ? this.getWindowCenter() : this.getElementCenter(this.$refs.wrapperDiv.parentElement)
-      const ec = this.getElementCenter(this.$refs.videoDiv)
-
-      const translate = `translate(${wc.x - ec.x}px, ${wc.y - ec.y}px)`
-      const scaleLevel = (this.$refs.wrapperDiv.parentElement.clientWidth) / this.$refs.videoDiv.clientWidth
-      const scale = `scale(${scaleLevel})`
-      this.scaleLevel = scaleLevel
-      return {
-        scale,
-        translate
-      }
-    },
+    animateTransform,
+    processAudio,
+    focusOn,
+    focusOff,
+    /**
+     * Абсолютно позиционирует элемент с видео, чтобы потом можно было применить к нему соответствующие анимации
+     */
     makeAbsolute () {
       this.style = {
         ...this.style,
@@ -133,12 +88,18 @@ export default {
         ...this.calculateAbsolutePosition()
       }
     },
+    /**
+     * Статично позиционирует элемент после того как он был возвращен в изначальное положение
+     */
     makeStatic () {
       this.style = {
         ...this.style,
         position: 'static'
       }
     },
+    /**
+     * Рассчитывает значения, которые следует применить к элементу с видео при абсолютном позиционировании
+     */
     calculateAbsolutePosition () {
       const wrapper = this.$refs.wrapperDiv
       return {
@@ -146,43 +107,15 @@ export default {
         height: `${wrapper.clientHeight}px`
       }
     },
-    getWindowCenter () {
-      return {
-        x: window.innerWidth / 2,
-        y: window.innerHeight / 2
-      }
-    },
-    getElementCenter (el) {
-      const rect = el.getBoundingClientRect()
-      const top = rect.top
-      const left = rect.left
-
-      const y = top + el.clientHeight / 2
-      const x = left + el.clientWidth / 2
-
-      return { x, y }
-    },
-    processAudio () {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-      const audioAnalyser = audioCtx.createScriptProcessor(1024, 1, 1)
-      audioAnalyser.connect(audioCtx.destination)
-      const audioSource = audioCtx.createMediaElementSource(this.videoContainer)
-      audioSource.connect(audioAnalyser)
-      audioAnalyser.addEventListener('audioprocess', e => {
-        const out = e.outputBuffer.getChannelData(0)
-        const int = e.inputBuffer.getChannelData(0)
-
-        let maxVolume = 0
-        for (let i = 0; i < int.length; i++) {
-          out[i] = int[i]
-          maxVolume = Math.max(int[i], maxVolume)
-          this.volumeLevel = (maxVolume * 100).toFixed(2)
-        }
-      })
-    },
+    /**
+     * Изменяет яркость
+     */
     adjustBrightness (e) {
       this.brightness = e.srcElement.value
     },
+    /**
+     * Изменяет контраст
+     */
     adjustContrast (e) {
       this.contrast = e.srcElement.value
     }

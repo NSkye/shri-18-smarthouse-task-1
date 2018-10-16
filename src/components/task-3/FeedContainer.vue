@@ -22,10 +22,13 @@
           </div>
           <div>
             <span>Освещение</span>
-            <span></span>
+            <div class='volume-level'>
+              <div class='volume-level__bar' :style='{ width: `${brightnessLevel}%` }' />
+            </div>
           </div>
         </div>
         <video :style='{ filter: `brightness(${brightness}%) contrast(${contrast}%)` }' ref='videoContainer' :muted='!showControls' src="" class="video__video" />
+        <canvas class='canvas' ref='canvas' />
       </div>
     </div>
   </div>
@@ -40,12 +43,16 @@ const HLS = window.Hls
 export default {
   data () {
     return {
+      canvas: null,
+      imageProcessorInterval: null,
+      previousImage: null,
       focusActive: false,
       backwardFrames: null,
       animationInProgress: false,
       videoContainer: null,
       showControls: false,
       volumeLevel: 0,
+      brightnessLevel: 0,
       scaleLevel: 1,
       brightness: 100,
       contrast: 100,
@@ -69,6 +76,8 @@ export default {
       hls.attachMedia(this.videoContainer)
       hls.on(HLS.Events.MANIFEST_PARSED, () => this.videoContainer.play())
     }
+
+    this.canvas = this.$refs.canvas
   },
   props: {
     source: String
@@ -118,6 +127,24 @@ export default {
      */
     adjustContrast (e) {
       this.contrast = e.srcElement.value
+    },
+    processImage () {
+      const ctx = this.canvas.getContext('2d')
+      const w = this.videoContainer.videoWidth / 2
+      const h = this.videoContainer.videoHeight / 2
+
+      this.canvas.width = w
+      this.canvas.height = h
+
+      this.imageProcessorInterval = setInterval(() => {
+        ctx.drawImage(this.videoContainer, 0, 0, w, h)
+
+        const imgData = ctx.getImageData(0, 0, w, h).data
+        const medianBrightness = (imgData.sort((a, b) => a - b))[Math.floor(imgData.length / 2)]
+        const imgBrightnessPercentage = (medianBrightness / 255) * 100
+
+        this.brightnessLevel = imgBrightnessPercentage
+      }, 1000)
     }
   }
 }
@@ -191,6 +218,9 @@ export default {
     background white
     min-width 1px
     height 100%
+
+.canvas
+  display none
 
 .position-relative-wrapper
   position relative

@@ -12,6 +12,7 @@ export function focusOn () {
       this.animationInProgress = false
       this.showControls = true
       this.processAudio()
+      this.processImage()
     }, 200)
   }
 }
@@ -23,6 +24,7 @@ export function focusOff () {
   if (!this.animationInProgress && this.focusActive) {
     this.animationInProgress = true
     this.showControls = false
+    clearInterval(this.imageProcessorInterval)
     this.animateTransform(() => {
       this.focusActive = false
       this.style.zIndex = 0

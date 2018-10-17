@@ -18,7 +18,9 @@
           </div>
           <div>
             <span>Движение</span>
-            <span></span>
+            <div class='volume-level'>
+              <div class='volume-level__bar' :style='{ width: `${motionLevel}%` }' />
+            </div>
           </div>
           <div>
             <span>Освещение</span>
@@ -45,6 +47,7 @@ export default {
     return {
       canvas: null,
       imageProcessorInterval: null,
+      imgData: null,
       previousImage: null,
       focusActive: false,
       backwardFrames: null,
@@ -53,6 +56,7 @@ export default {
       showControls: false,
       volumeLevel: 0,
       brightnessLevel: 0,
+      motionLevel: 0,
       scaleLevel: 1,
       brightness: 100,
       contrast: 100,
@@ -140,7 +144,7 @@ export default {
         ctx.drawImage(this.videoContainer, 0, 0, w, h)
 
         const imgData = ctx.getImageData(0, 0, w, h).data
-
+        this.registerFrameDiff(imgData)
         // существенно уменьшаем количество обрабатываемых пикселей, будет где-то 63, достаточно, чтоб понять уровень освещенности
         const step = Math.floor((imgData.length) / 250) * 4
 
@@ -156,6 +160,28 @@ export default {
 
         this.brightnessLevel = imgBrightnessPercentage
       }, 1000)
+    },
+    registerFrameDiff (imgData) {
+      if (!this.imgData) {
+        this.imgData = imgData
+        return null
+      }
+
+      let motion = 0
+      for (let i = 0; i < imgData.length; i += 4) {
+        let ii = 0
+        while (ii < 3) {
+          if (this.imgData[i + ii] !== imgData[i + ii]) {
+            motion++
+            break
+          }
+          ii++
+        }
+      }
+
+      motion = (motion / (imgData.length / 4)) * 100
+      this.motionLevel = motion
+      this.imgData = imgData
     }
   }
 }
